@@ -1,0 +1,71 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: wrhilane <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/20 22:38:51 by wrhilane          #+#    #+#             */
+/*   Updated: 2023/03/20 22:38:59 by wrhilane         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef PHILO_H
+# define PHILO_H
+
+# include <stdio.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <sys/time.h>
+# include <pthread.h>
+
+typedef struct s_arg
+{
+	int						total;
+	int						die;
+	int						eat;
+	int						sleep;
+	int						m_eat;
+	long int				start_t;
+	pthread_mutex_t			write_mutex;
+	pthread_mutex_t			dead;
+	pthread_mutex_t			time_eat;
+	pthread_mutex_t			finish;
+	int						nb_p_finish;
+	int						stop;
+}							t_arg;
+
+typedef struct s_philo
+{
+	int						id;
+	pthread_t				thread_id;
+	pthread_t				thread_death_id;
+	pthread_mutex_t			*right_fork;
+	pthread_mutex_t			left_fork;
+	t_arg					*pa;
+	long int				ms_eat;
+	unsigned int			nb_eat;
+	int						finish;
+}							t_philo;
+
+typedef struct s_p
+{
+	t_philo					*ph;
+	t_arg					a;
+}							t_p;
+
+int				ft_args(int argc, char **argv, t_p *p);
+int				ft_init(t_p *p);
+int				ft_exit(char *str);
+void			write_status(char *str, t_philo *ph);
+long int		actual_time(void);
+void			ft_putstr_fd(char *s, int fd);
+void			ft_usleep(long int time_in_ms);
+int				ft_threads(t_p *p);
+void			activity(t_philo *ph);
+int				check_death(t_philo *ph, int i);
+int				check_death2(t_p *p);
+int				ft_strlen(char *str);
+void			stop(t_p *p);
+
+#endif
